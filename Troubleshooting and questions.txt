@@ -1,0 +1,3 @@
+Question to reviewers - I am using a google big query private key to be able to get data from big query. 
+how do i make sure reviewers can also see the data I'm working with when opening my code?
+I had to enable bigquery API in VScode to do this - how do I make sure the people reviewing can also do this
