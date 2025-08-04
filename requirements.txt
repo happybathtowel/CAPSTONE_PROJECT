@@ -6,3 +6,6 @@ ipython==9.0.2
 pandas==2.2.3
 pyarrow==20.0.0
 google-cloud-bigquery
+matplotlib==3.10.5
+seaborn==0.13.2
+
