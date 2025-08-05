@@ -8,4 +8,3 @@ pyarrow==20.0.0
 google-cloud-bigquery
 matplotlib==3.10.5
 seaborn==0.13.2
-
