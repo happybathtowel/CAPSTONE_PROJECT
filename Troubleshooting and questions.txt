@@ -1,8 +1,0 @@
-Question to reviewers - I am using a google big query private key to be able to get data from big query. 
-how do i make sure reviewers can also see the data I'm working with when opening my code?
-I had to enable bigquery API in VScode to do this - how do I make sure the people reviewing can also do this on their virtual environment?
-Andrew had trouble running my query5 code - error message said 403 forbidden quota exceeded
-*Alex told me I need to change my config.json file - something about it being empty at the moment and it is causing error
-*Alex told me I need to add From Google.Cloud import bigquery to my requirement in the proper way it needs to be listed in the requirements. 
-*I need to drag and drop the contents of my API key into the "Config" file and then drag the config file into gitignore. Update my code to mention "config.json" instead of the long file name that it uses right now. 
-Note to self - I need to slack message Eileen and send her the content of my credentials (Config.json file) so she can have access to my API key when she reviews my project.

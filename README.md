@@ -1,91 +1,102 @@
 # CAPSTONE_PROJECT
 
-## This project analyzes Bitcoin blockchain data alongside global events to identify potential correlations in transaction behavior, block congestion, and network activity.
+## Project Overview: This project explores patterns and insights in Bitcoin blockchain activity during March 2020, a time of major global financial disruption due to the COVID-19 pandemic. Using a 100,000-row sample of transactions from the Bitcoin blockchain, the analysis focuses on transaction behavior, fee dynamics, and potential indicators of network congestion.
+
+## Project Objective: Gain insight on network usage and fees of the bitcoin blockchain during one of the most consequential timeperiod in recent history from world economy point of view. By adding features and visualizations, this project attempts to explain what was happening to the bitcoin blockchain during the beginning of a global crisis. 
+
+## Technologies Used:Python, Jupyter Notebook, Google BigQuery, SQLite, pandas, matplotlib, and seaborn.
+### *For further inforamtion on the individual packages required to run this project, please refer to the requirements.txt file 
+ 
+## Instructions on how to download, install, and run the project:
+
+### Activate Python virtual environment first and install all packages before running the notebook.
+
+1. create a new virtual environment
+```
+python -m venv venv
+```
+
+2. activate the virtual environment
+```
+source venv/Scripts/activate
+```
+
+3. install packages
+```
+pip install -r requirements.txt
+```
+
+4. make sure your kernel is switched to the venv python kernel
+
+5. run the project
+
+
+
+
+
 
 ## Data Dictionary 
 
 ### Bitcoin Blocks Table
 
-| Column Name        | Description |
-|--------------------|-------------|
-| `block_id`         | Unique identifier (hash) for the block |
-| `previous_block`   | Hash of the previous block in the chain |
-| `merkle_root`      | Root hash of the Merkle tree summarizing transactions in the block |
-| `timestamp`        | Time the block was mined (UNIX timestamp format) |
-| `difficultyTarget` | Mining difficulty target at the time the block was mined |
-| `nonce`            | A random number used during mining to solve the block |
-| `version`          | Version number of the block protocol |
-| `work_terahash`    | Estimated computational work performed (in terahashes) |
-| `work_error`       | Error estimate in computational work (often null) |
-| `transactions`     | List of transaction hashes included in this block |
-| `row_number`       | Query-generated index (not part of actual blockchain data) |
+| Column Name       | Description                                                           |
+|-------------------|-----------------------------------------------------------------------|
+| number            | Block height (used for join with transactions)                        |
+| hash              | Unique block identifier (used as transaction_id in joined table)      |
+| timestamp         | Timestamp when the block was mined (used in joined query)             |
+| transaction_count | Number of transactions in this block (not used in final analysis)     |
+| size              | Size of the block in bytes (not used)                                 |
+| difficulty_target | Indicator of mining difficulty (excluded due to missing values)       |
+| nonce             | Proof-of-work nonce (not used)                                        |
+| merkle_root       | Merkle root of the block's transactions (not used)                    |
 
 ### Bitcoin Transactions Table
-| Column Name        | Description |
-|--------------------|-------------|
-| `timestamp`        | The time the transaction was included in a block (UNIX timestamp format) |
-| `transaction_id`   | Unique identifier (hash) of the transaction |
-| `inputs`           | JSON-formatted list of input references, showing which unspent coins are being used |
-| `outputs`          | JSON-formatted list of outputs showing where the coins are being sent and in what amounts |
-| `block_id`         | Hash of the block that includes this transaction |
-| `previous_block`   | Hash of the previous block in the chain (same for all tx in the same block) |
-| `merkle_root`      | Root hash summarizing all transactions in the block |
-| `nonce`            | Mining nonce used to solve the block (duplicated from blocks table) |
-| `version`          | Version number of the transaction format/protocol |
-| `work_terahash`    | Estimated amount of computational work needed to mine the block (same across all tx in a block) |
-| `work_error`       | Estimation error in work calculation (often null or not used) |
-
-### Bitcoin Outputs Table
-| Column Name            | Description |
-|------------------------|-------------|
-| `transaction_hash`     | Unique identifier (hash) of the transaction this output belongs to |
-| `block_hash`           | Hash of the block that includes this transaction |
-| `block_number`         | Height of the block in the blockchain (i.e., how many blocks came before it) |
-| `block_timestamp`      | Time the block was mined (already in human-readable datetime format) |
-| `index`                | Position of this output in the list of outputs for the transaction (e.g., 0 = first) |
-| `script_asm`           | Output script in human-readable assembly format (used in Bitcoin's scripting system) |
-| `script_hex`           | Output script in hexadecimal format |
-| `required_signatures`  | Number of required signatures to spend this output (always null in your sample) |
-| `type`                 | Type of script used (e.g., "pubkeyhash", "nulldata", etc.) |
-| `addresses`            | List of recipient Bitcoin addresses associated with this output |
-| `value`                | Amount sent in the output (usually in satoshis or BTC) |
+| Column Name      | Description                                                                  |
+|------------------|------------------------------------------------------------------------------|
+| hash             | Unique identifier for each transaction (used as transaction_id in joined table)|
+| size             | Size of the transaction in bytes (not used)                                  |
+| virtual_size     | Virtual size of the transaction (used for fee calculation in other studies)  |
+| version          | Version number of the transaction protocol (not used)                        |
+| lock_time        | Time when transaction is finalized (not used)                                |
+| block_hash       | Hash of the block that contains this transaction (not used)                  |
+| block_number     | Height of the block containing this transaction (used for join)              |
+| block_timestamp  | Timestamp when transaction was mined (used for extracting tx_hour and date)  |
+| input_count      | Number of input addresses in the transaction (not used)                      |
+| output_count     | Number of output addresses in the transaction (not used)                     |
+| input_value      | Total input value of the transaction (used in fee_rate and value_diff)       |
+| output_value     | Total output value of the transaction (used in value_diff)                   |
+| is_coinbase      | Boolean indicator if this was a coinbase transaction(not used)               |
+| fee              | Fee associated with the transaction (used in fee_rate and average fee charts)|
+| inputs           | Raw input address information (not used in analysis)                         |
+| outputs          | Raw output address information (not used in analysis)                        |
+| tx_hour          | Engineered feature: hour of the day from block_timestamp                     |
+| fee_rate         | Engineered feature: fee divided by input_value                               |
+| value_diff       | Engineered feature: output_value - input_value                               |
 
 ### Data Summary
-This project uses threee Bitcoin blockchain tables from Google BigQuery:
+This project uses two Bitcoin blockchain tables from Google BigQuery:
 1. **Blocks Table**
     - Contains metadata for each mined block on the Bitcoin network.
-    - Key features: block hash, timestamp, difficulty, and transaction count.
-    - Column:11: includes some unused or emptry fields such as `work_error`
+
 
 2. **Transactions Table**
     - Contains individual transaction records linked to each block.
-    - Includes nested input/output data, which may require further transformation.
-    - Some fields (e.g., `merkle_root`, `nonce`) are duplicated from the blocks table.
-    - Columns: 11
 
-3. **Outputs Table**
-    - Contains output details from each transaction, including value sent and recipient addresses.
-    - Key columns include `value`, `script_asm`, and `addresses`.
-    - Column `required_signatures` is mostly null in the sampled data.
-    - Columns: 11
+
 
 ### Data Source
 
 This project uses three public datasets hosted on **Google BigQuery**:
 
 1. **Bitcoin Blocks Table**
-    - Table: `bigquery-public-data.bitcoin_blockchain.blocks`  
-    - Contains block-level metadata such as block hash, timestamp, nonce, and number of transactions.  
-    - [View on BigQuery Console](https://console.cloud.google.com/bigquery?p=bigquery-public-data&d=bitcoin_blockchain&t=blocks&page=table)
+  - Dataset: `bigquery-public-data.crypto_bitcoin.blocks`  
+  - Filtered to blocks from March 2020
+
 
 2. **Bitcoin Transactions Table**  
-    - Table: `bigquery-public-data.bitcoin_blockchain.transactions`  
-    - Contains transaction-level data including inputs, outputs, and associated block info.  
-    - [View on BigQuery Console](https://console.cloud.google.com/bigquery?p=bigquery-public-data&d=bitcoin_blockchain&t=transactions&page=table)
+  - Dataset: `bigquery-public-data.crypto_bitcoin.transactions`  
+  - Filter: 100,000 rows from March 1–31, 2020
 
-3. **Bitcoin Outputs Table**  
-    - Table: `bigquery-public-data.crypto_bitcoin.outputs`  
-    - Contains transaction outputs with values, recipient addresses, and output scripts.  
-    - [View on BigQuery Console](https://console.cloud.google.com/bigquery?p=bigquery-public-data&d=crypto_bitcoin&t=outputs&page=table)
+**Disclaimer:** This project uses a limited 100,000-row sample of transaction data for performance reasons. Therefore, findings represent trends in the sample, not the full Bitcoin network during that time.
 
 These datasets are free and publicly accessible through the Google Cloud BigQuery platform. Access in this project was managed through a Google Cloud service account and authenticated using a credentials file provided locally.
