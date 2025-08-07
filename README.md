@@ -59,7 +59,7 @@ pip install -r requirements.txt
 |------------------|--------------------------------------------------------------------------------|
 | hash             | Unique identifier for each transaction (used as transaction_id in joined table)|
 | size             | Size of the transaction in bytes (not used)                                    |
-| virtual_size     | Virtual size of the transaction (used for fee calculation in other studies)    |
+| virtual_size     | Virtual size of the transaction (not used)                                     |
 | version          | Version number of the transaction protocol (not used)                          |
 | lock_time        | Time when transaction is finalized (not used)                                  |
 | block_hash       | Hash of the block that contains this transaction (not used)                    |
