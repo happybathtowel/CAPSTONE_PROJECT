@@ -2,7 +2,7 @@
 
 ## Project Overview: This project explores patterns and insights in Bitcoin blockchain activity during March 2020, a time of major global financial disruption due to the COVID-19 pandemic. Using a 100,000-row sample of transactions from the Bitcoin blockchain, the analysis focuses on transaction behavior, fee dynamics, and potential indicators of network congestion.
 
-## Project Objective: Gain insight on network usage and fees of the bitcoin blockchain during one of the most consequential timeperiod in recent history from world economy point of view. By adding features and visualizations, this project attempts to explain what was happening to the bitcoin blockchain during the beginning of a global crisis. 
+## Project Objective: Gain insight on network usage and fees of the bitcoin blockchain during one of the most consequential timeperiod in recent history from world economy point of view. By adding features and visualizations, this project attempts to explain what was happening to the bitcoin blockchain during the beginning of a global crisis and examine if it had any correlations with real-world events. 
 
 ## Technologies Used:Python, Jupyter Notebook, Google BigQuery, SQLite, pandas, matplotlib, and seaborn.
 ### *For further information on the individual packages required to run this project, please refer to the requirements.txt file 
@@ -101,6 +101,6 @@ This project uses three public datasets hosted on **Google BigQuery**:
   - Dataset: `bigquery-public-data.crypto_bitcoin.transactions`  
   - Filter: 100,000 rows from March 1–31, 2020
 
-**Disclaimer:** This project uses a limited 100,000-row sample of transaction data for performance reasons. Therefore, findings represent trends in the sample, not the full Bitcoin network during that time.
+**Limitations Disclaimer:** This project uses a limited 100,000-row sample of transaction data for performance reasons. Therefore, findings represent trends in the sample, not the full Bitcoin network during that time.
 
 These datasets are free and publicly accessible through the Google Cloud BigQuery platform. Access in this project was managed through a Google Cloud service account and authenticated using a credentials file provided locally.
